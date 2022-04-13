@@ -9,6 +9,8 @@ export default function HomePage() {
             <Link to="/">
                 <button className="primary-button">Log out</button>
             </Link>
+            <Link to="/aadhar">
+            <button class="button2">Verify</button></Link>
         </div>
         </>
     )
