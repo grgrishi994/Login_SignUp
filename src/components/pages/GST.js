@@ -9,7 +9,8 @@ const GST = () => {
     const initialValues = { GST:""};
     const [formValues, setFormValues] = useState(initialValues);
     const [formErrors, setFormErrors] = useState({});
-    const [isSubmit, setIsSubmit] = useState(false);
+    const [errorMessage, seterrorMessage] = React.useState("");
+  const [isError, setIsError] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -19,19 +20,17 @@ const GST = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setFormErrors(validate(formValues));
-        setIsSubmit(true);
-        {Object.keys(formErrors).length === 0 && isSubmit ? (
+        const errors = validate(formValues);
+       
+        Object.keys(errors).length === 0  ?
             navigate("/TAN")
-          ) : (
-            <pre>{JSON.stringify(formValues, undefined, 2)}</pre>
-          )}
-        
+           : setIsError(true);
+          
     };
 
     const validate = (values) => {
         const errors = {};
-        const regex1=/^[ A-Za-z0-9_@./#&+-]*$/;
+        const regex1=/[A-Z]{5}[0-9]{4}[A-Z]{1}/;
         if (!values.GST) {
             errors.GST = 'GST no required';
         } else if (!regex1.test(values.GST)) {
@@ -58,6 +57,7 @@ const GST = () => {
         We fetched some details from your GST please check them carefully.
     </p>
     <div class="A2">
+    {isError && <p style={{ color: "red" }}>Invalid data!</p>}
         <p class="p">
             <button id="s_btn"  type="cancel">Re-enter</button>
             <button id="button1" type="submit" >Next</button>

@@ -9,7 +9,8 @@ export default function LoginPage() {
     const initialValues = { digits:"", OTP: ""};
     const [formValues, setFormValues] = useState(initialValues);
     const [formErrors, setFormErrors] = useState({});
-    const [isSubmit, setIsSubmit] = useState(false);
+    const [errorMessage, seterrorMessage] = useState("");
+  const [isError, setIsError] = useState(false);
   
 
 
@@ -21,22 +22,13 @@ export default function LoginPage() {
       
     const handleSubmit = (e) => {
      e.preventDefault();
-    setFormErrors(validate(formValues));
-    setIsSubmit(true);
+   const errors = validate(formValues);
 
-    {Object.keys(formErrors).length === 0 && isSubmit ? (
-      navigate("/home")
-    ) : (
-      <pre>{JSON.stringify(formValues, undefined, 2)}</pre>
-    )}
-    };
+    Object.keys(errors).length === 0 ? 
+      navigate("/home"): setIsError(true);
+   };
 
-    // useEffect(() => {
-    //     console.log(formErrors);
-    //     if (Object.keys(formErrors).length === 0 && isSubmit) {
-    //       console.log(formValues);
-    //     }
-      // }, [formErrors]);
+
       const validate = (values) => {
         const errors = {};
         const regex = /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i;
@@ -79,6 +71,8 @@ export default function LoginPage() {
                         onChange={handleChange}
                     required />
                 </p>
+       
+                {isError && <p style={{ color: "red" }}>Invalid data!</p>}
                 <p>
                 <button id="sub_btn" type="submit">Login</button>
                 </p>
